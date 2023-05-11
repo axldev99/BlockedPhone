@@ -1,0 +1,164 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+<form class="example-form" [formGroup]="form1" [ngClass]="{'inactive' : (page$ | async) != 1}">
+  
+  <div>
+    <h2>User creation infos</h2>
+
+
+    <mat-form-field class="example-full-width">
+      <mat-label>Email</mat-label>
+      <input type="email" matInput formControlName="email"
+             placeholder="Ex. pat@example.com" name="email">
+      <mat-error *ngIf="form1.controls['email'].hasError('required')">
+        Email is <strong>required</strong>
+      </mat-error>
+      <mat-error *ngIf="form1.controls['email'].hasError('email')">
+        Please enter a valid email address
+      </mat-error>
+    </mat-form-field>
+
+
+    <mat-form-field class="example-full-width">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" #password placeholder="Password" [type]="hidePw ? 'password' : 'text'" formControlName="password">
+        <mat-icon matSuffix (click)="hidePw = !hidePw">{{hidePw ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-error *ngIf="form1.controls['password'].hasError('required')">
+            Password is <strong>required</strong>
+          </mat-error>
+    </mat-form-field>
+
+      
+    <mat-progress-bar mode="determinate"
+                  [color]="color"
+                  [value]="numberOfValid">
+    </mat-progress-bar>
+
+    <mat-list class="listItem" role="list" *ngFor="let condition of (conditions$ | async)">
+        <mat-list-item role="listitem">
+            <mat-icon aria-hidden="false" class={{condition.class}} aria-label="Example error icon" fontIcon={{condition.value}}>{{condition.value}}</mat-icon> 
+            <p [class]="condition.class + ' fullH'">{{condition.text}}</p>
+        </mat-list-item>
+    </mat-list>
+
+
+    <mat-form-field class="example-full-width">
+        <mat-label>Confirm Password</mat-label>
+        <input matInput type="password" formControlName="confirmPassword" placeholder="Confirm Password" [type]="hidePwC ? 'password' : 'text'">
+        <mat-icon matSuffix (click)="hidePwC = !hidePwC">{{hidePwC ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-error *ngIf="form1.controls['confirmPassword'].hasError('required')">
+            Confirm Password is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="form1.controls['confirmPassword'].hasError('matching') && !form1.controls['confirmPassword'].hasError('required')">
+            Passwords must match
+        </mat-error>
+    </mat-form-field>   
+
+    <div class="example-button-row">
+      <button class="btnLeft" mat-raised-button (click)="reset()">
+        Reset
+      </button>
+
+      <button class="btnCenter" mat-raised-button color="primary" (click)="save()">
+        Save
+      </button>
+
+      <button class="btnRight" mat-raised-button (click)="goNext()">
+        Next
+      </button>
+    </div>
+
+  </div>
+</form>
+  <!-- Pourrait ajouter en fonction de la ville différents adresses -->
+<form class="example-form" [formGroup]="form2" [ngClass]="{'inactive' : (page$ | async) != 2}">
+  <div >
+    <h2>Appreciation survey</h2>
+
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>City</mat-label>
+      <input type="text" matInput formControlName="city" [matAutocomplete]="auto">
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+          {{option}}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="form2.controls['city'].hasError('required')">
+        City is <strong>needed!</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Très nice le date picker, meme pas besoin de gérer la first et last date -->
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Enter a date range</mat-label>
+      <mat-date-range-input [rangePicker]="picker" [formGroup]="form2">
+        <input matStartDate formControlName="dateStart" placeholder="Start date">
+        <input matEndDate formControlName="dateEnd" placeholder="End date">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+      <mat-error *ngIf="form2.controls['dateStart'].invalid || form2.controls['dateEnd'].invalid">
+        {{ form2.controls['dateStart'].errors | onlyOneError: 'Provide the starting date of your stay' : 'Provide your end date of your stay' }}
+        {{ form2.controls['dateEnd'].errors | onlyOneError: 'Provide the starting date of your stay' : 'Provide your end date of your stay' }}
+      </mat-error>
+    </mat-form-field>
+
+  
+    
+    <label>Enter your appreciation</label><!-- Add custom options (Min max)-->
+    <!-- Si y a une erreur, ça doit être visible, mettre en rouge enter you appreciation -->
+    <mat-slider
+      class="example-full-width"
+      thumbLabel
+      [displayWith]="formatLabel"
+      [value]="appreciationValue"
+      (change)="form2.controls['appreciation'].setValue($event.value)"
+      step="1"
+      min="0"
+      max="100"
+      aria-label="units">
+    </mat-slider>
+    <mat-form-field style="top:-20px" class="example-full-width">
+      <input class="inactive" #appreciation type="number" formControlName="appreciation" matInput>
+      <mat-error *ngIf="form2.controls['appreciation'].hasError('required')">
+        Appreciation is <strong>appreciated, thx</strong>
+      </mat-error>
+    </mat-form-field>
+
+
+    <mat-form-field class="example-full-width">
+      <mat-label>Comment</mat-label>
+      <textarea matInput formControlName="comment" placeholder="Comment"></textarea>
+      <mat-error *ngIf="form2.controls['comment'].hasError('required')">
+        Comment is <strong>appreciated, thx</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <div class="example-button-row">
+      <button class="btnLeft" mat-raised-button (click)="goBack()">
+        Back
+      </button>
+
+      <button class="btnCenter" mat-raised-button color="primary" (click)="save()">
+        Save
+      </button>
+
+      <!-- Sauvegarde et redirige vers page de merci -->
+      <button class="btnRight" mat-raised-button [disabled]="!form2.valid || !form1.valid" (click)="submit()">
+        Submit
+      </button>
+    </div>
+  </div>
+</form>
+
+  <div class="form-val">
+    {{form1.value | json}}
+    {{form2.value | json}}
+    
+  </div>
+
+  <div class="form-val">
+    {{form1.valid}}
+    {{form2.valid}}
+  </div>

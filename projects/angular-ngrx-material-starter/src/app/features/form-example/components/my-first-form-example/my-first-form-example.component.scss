@@ -1,0 +1,127 @@
+.example-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+    margin:auto;
+    margin-top:10vh;
+    border: 1px gray solid;
+    border-radius:50px;
+    padding:50px;
+  }
+
+  .listItem{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  mat-list-item mat-icon{
+    float:left;
+    padding-right:10px;
+  }
+
+  /*
+  .mat-mdc-progress-bar.mat-warn{
+    color:red !important;
+    background-color:rgba(255, 0, 0, 0.192) !important;
+  }
+
+  .mat-mdc-progress-bar.mat-accent{
+    color:yellow !important;
+    background-color:rgba(255, 255, 0, 0.473) !important;
+  }
+
+  .mat-mdc-progress-bar.mat-primary{
+    color:green !important;
+    background-color:rgba(0, 255, 0, 0.349) !important;
+  }
+
+  .mdc-linear-progress__bar-inner{
+    border-color:black !important;
+  }
+  */
+
+  .fullH{
+    height:100%;
+    margin:0;
+    line-height: 45px;
+
+  }
+
+  .example-form .error{
+    color:red;
+  }
+
+  .example-form .valid{
+    color:green;
+  }
+  
+  .example-form h2{
+    padding-bottom:10px;
+  }
+
+  .example-full-width {
+    width: 100%;
+  }
+
+
+  /* BUTTON ROW */
+  section {
+    display: table;
+  }
+  
+  .example-label {
+    display: table-cell;
+    font-size: 14px;
+    margin-left: 8px;
+    min-width: 120px;
+  }
+  
+  .example-button-row {
+    text-align: center;
+    margin-top:10px;
+  }
+  
+  .example-button-row .mat-mdc-button-base {
+    margin: 8px 8px 8px 0;
+  }
+  
+  .example-flex-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .example-button-container {
+    display: flex;
+    justify-content: center;
+    width: 120px;
+  }
+  
+  .btnRight{
+    float:right;
+  }
+
+  .btnLeft{
+    float:left;
+  } 
+
+  .error {
+    background-color:unset;
+  }
+
+  .errorBox{
+    border: 1px red solid;
+  }
+
+  .errorLabel{
+    color:red;
+  }
+
+  .active {
+    display:block;
+  }
+
+  .inactive {
+    display:none;
+  }
