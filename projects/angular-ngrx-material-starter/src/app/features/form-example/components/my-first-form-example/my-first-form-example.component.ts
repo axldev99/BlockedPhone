@@ -1,14 +1,16 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild, ElementRef } from '@angular/core';
-import { Observable, concat, fromEvent, of } from 'rxjs';
-import { skip, startWith, take } from 'rxjs/operators';
-import { Condition, Review, User } from '../../form-example.model';
+import { Component, OnInit, ChangeDetectionStrategy, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Observable, concat, fromEvent, of, Subject } from 'rxjs';
+import { skip, startWith, take, takeUntil } from 'rxjs/operators';
+import { Condition, Countries, FormExample, Review, User } from '../../form-example.model';
 import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import { createPasswordConfirmValidator, createPasswordStrenghtValidator, endDateBeforeStartDateValidator } from '../../form-example.validator';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../core/core.state';
 import { FormExampleService } from '../../form-example.service';
 import { debounceTime, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators';
-import { goNext, goBack, reset, saveFormExample } from '../../form-example.action';
+import { goNext, goBack, reset, saveFormExampleRequested } from '../../form-example.action';
+import { selectFormExample } from '../../form-example.state';
+import { selectFormExamplePage } from '../../form-example.selector';
 
 @Component({
   selector: 'anms-my-first-form-example',
@@ -16,7 +18,13 @@ import { goNext, goBack, reset, saveFormExample } from '../../form-example.actio
   styleUrls: ['./my-first-form-example.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MyFirstFormExampleComponent implements OnInit {
+
+export class MyFirstFormExampleComponent implements OnInit, OnDestroy {
+  unsubscribe: Subject<void> = new Subject<void>(); //Fais pour désouscrire les souscriptions qu'on va faire
+
+  /*Daniel*/
+  countries$: Observable<Countries[]>;
+  filteredCountries$: Observable<Countries[]>;
 
   /*Conditions*/
   containAtLeastEightChars = false;
@@ -36,7 +44,9 @@ export class MyFirstFormExampleComponent implements OnInit {
   page$: Observable<number>;
   appreciationError$: Observable<boolean>;
   filteredOptions: Observable<string[]>;
-  
+  formExample$: Observable<FormExample>;
+  formExample: FormExample;
+
   /*Form Data*/
   user: User;
   review: Review;
@@ -51,15 +61,29 @@ export class MyFirstFormExampleComponent implements OnInit {
   form1: FormGroup;
   form2: FormGroup;
 
-  constructor(private fb: FormBuilder, private store: Store<AppState>, private formExampleService: FormExampleService) {
-   }
+  constructor(private fb: FormBuilder, private store: Store<AppState>, private formExampleService: FormExampleService) { }
   
   ngOnInit() {
+/*Daniel*/
+
+    this.countries$ = of([
+      { name: 'Afgan', code: 'AA' },
+      { name: 'Albania', code: 'AB' },
+      { name: 'Algeria', code: 'AC' },
+      { name: 'American Samoa', code: 'AD' },
+      { name: 'Andorra', code: 'AE' },
+      { name: 'Angola', code: 'AF' },
+      { name: 'Anguilla', code: 'AG' },
+    ]);
+
     //Initialiser LES CHAMPS FAUDRA TOUTE INITIALISER LES DATA
 
     const formExample = JSON.parse(localStorage.getItem("formExample")) ? localStorage.getItem("formExample") : null;
-    this.page$ = of(JSON.parse(localStorage.getItem("page")) && parseInt(JSON.parse(localStorage.getItem("page"))) ? parseInt(JSON.parse(localStorage.getItem("page"))) : 1)
-    //const isAuth = localStorage.getItem("isAuth");
+    this.page$ = this.store.pipe(select(selectFormExamplePage));
+    this.formExample$ = this.store.pipe(select(selectFormExample));
+    this.formExample$.pipe(takeUntil(this.unsubscribe)).subscribe(formExample => {
+      this.formExample = formExample
+    });//Chaque fois que le store change, met à jour la variable
 
     this.conditionsInitiales$ = this.ActualizeConditions();
 
@@ -76,18 +100,6 @@ export class MyFirstFormExampleComponent implements OnInit {
         }}
       );
 
-      //Initialise le store à partir du localstorage
-
-      this.saveFormExample(
-        JSON.parse(formExample).user.email, 
-        JSON.parse(formExample).user.password,
-        JSON.parse(formExample).user.confirmPassword, 
-        JSON.parse(formExample).review.city, 
-        JSON.parse(formExample).review.dateStart, 
-        JSON.parse(formExample).review.dateEnd, 
-        JSON.parse(formExample).review.appreciation, 
-        JSON.parse(formExample).review.comment, 
-      );
       if(parseInt(JSON.parse(formExample).review.appreciation) != 0){
       console.log("setted");
         this.appreciationValue = parseInt(JSON.parse(formExample).review.appreciation);
@@ -115,10 +127,11 @@ export class MyFirstFormExampleComponent implements OnInit {
     }); 
 
     this.form2 = this.fb.group({
-      city: [formExample ? JSON.parse(formExample).review.city : '', {validators: 
+      /*city: [formExample ? JSON.parse(formExample).review.city : '', {validators: 
         [
           Validators.required
-        ]}],
+        ]}],*/
+      countries: '',
       dateStart: [formExample ? JSON.parse(formExample).review.dateStart : '', {validators: 
         [
           Validators.required
@@ -150,12 +163,30 @@ export class MyFirstFormExampleComponent implements OnInit {
       tap(conditions => this.calcStrenghtAndColor(conditions.filter(condition => condition.class == 'valid').length * (100/conditions.length))),
     );
     this.conditionClass();
-
+/*
     this.filteredOptions = this.form2.get('city').valueChanges.pipe(
       startWith(''),
       debounceTime(300),
       map(option => this._filter(option))
     );
+*/
+    /*Daniel*/
+
+    const searchCountries = this.form2.get('countries').valueChanges.pipe(
+      startWith(''),
+      debounceTime(300),
+      switchMap(option => this._filterCountries(option)),
+    );
+    
+    this.filteredCountries$ = concat(searchCountries, this.countries$);
+
+  }
+  private _filterCountries(searchTerm: string): Observable<Countries[]> {
+    const filteredCountries = this.countries$.pipe(
+      map(countries => countries.filter(country => country.name.toLowerCase().includes(searchTerm.toLowerCase()))),
+    );
+
+    return filteredCountries;
   }
 
   //Filtre les options de la ville
@@ -217,20 +248,19 @@ export class MyFirstFormExampleComponent implements OnInit {
 
   //Va à la page suivante, actualise le state, localStorage et observable
   goNext(){
-    this.store.dispatch(goNext());
-    this.page$ = of(2);
+    this.store.dispatch(goNext({page: 2}));
   }
 
   goBack(){
-    this.store.dispatch(goBack());
-    this.page$ = of(1);
+    this.store.dispatch(goBack({page: 1}));
   }
 
   //Save le form comme il est
-  save(){ 
-      this.saveFormExample(this.form1.value.email, this.form1.value.password, this.form1.value.confirmPassword, 
-        this.form2.value.city,this.form2.value.dateStart, this.form2.value.dateEnd,this.form2.value.appreciation,this.form2.value.comment,
-      )
+  save() {
+    const user: User = {email: this.form1.value.email, password: this.form1.value.password, confirmPassword: this.form1.value.confirmPassword};
+    const review: Review = {city: this.form2.value.city, dateStart: this.form2.value.dateStart, dateEnd: this.form2.value.dateEnd, appreciation: this.form2.value.appreciation, comment: this.form2.value.comment};
+    const form: FormExample = { user, review}
+      this.saveFormExample(form);
   }
   //Reset les champs, le state, le localStorage et les conditions et barre de progression
   reset() {
@@ -253,18 +283,22 @@ export class MyFirstFormExampleComponent implements OnInit {
   }
 
   
-  saveFormExample(email, password, confirmPassword, city, dateStart, dateEnd, appreciation, comment){
+  saveFormExample(formExample: FormExample){
     this.page$.pipe(
       take(1), // Prenez seulement la première valeur émise par page$
       switchMap(page => 
-        this.formExampleService.saveFormExample(email, password, confirmPassword, city, dateStart, dateEnd, appreciation, comment)
+        this.formExampleService.saveFormExample(formExample)
           .pipe(
             tap(formExample => {
-              this.store.dispatch(saveFormExample({formExample, page}));
+              this.store.dispatch(saveFormExampleRequested({formExample, page}));
             })
           )
       )
     ).subscribe(console.log);
   }
 
+  ngOnDestroy(): void {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
+  }
 }

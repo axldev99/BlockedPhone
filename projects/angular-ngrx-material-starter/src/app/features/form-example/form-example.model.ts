@@ -22,5 +22,10 @@ export interface Review {
     dateEnd: string;
     appreciation : string;
     comment: string;
-
 }
+
+export interface Countries {
+    name: string;
+    code: string;
+}
+
