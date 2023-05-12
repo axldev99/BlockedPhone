@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {tap} from 'rxjs/operators';
+import {map, mergeMap, switchMap, tap} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import * as FormExampleAction from './form-example.action';
 
@@ -11,11 +11,11 @@ export class FormExampleEffect {
     saveFormExample$ = createEffect(() =>
         this.actions$
             .pipe(
-                ofType(FormExampleAction.saveFormExample),
-                tap(action => localStorage.setItem('formExample',
-                        JSON.stringify(action.formExample))
+                ofType(FormExampleAction.saveFormExampleRequested),
+                    tap(action => localStorage.setItem('formExample', JSON.stringify(action.formExample))),
+                    map(action => FormExampleAction.saveFormExampleSuccess({formExample: action.formExample, page: action.page})),  
                 ),
-            ),{dispatch: false});
+            );
 
     reset$ = createEffect(() =>
     this.actions$
@@ -34,7 +34,7 @@ export class FormExampleEffect {
             ofType(FormExampleAction.goNext),
                 tap
                 (
-                    action => updatePageState(2)
+                    action => updatePageState(action.page)
                 )
         ),{dispatch: false});
 
@@ -44,7 +44,7 @@ export class FormExampleEffect {
             ofType(FormExampleAction.goBack),
                 tap
                 (
-                    action => updatePageState(1)
+                    action => updatePageState(action.page)
                 )
         ),{dispatch: false});
 

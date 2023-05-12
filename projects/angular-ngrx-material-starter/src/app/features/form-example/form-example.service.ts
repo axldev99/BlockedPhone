@@ -11,11 +11,9 @@ export class FormExampleService {
     constructor() {
     }
 
-    saveFormExample(email:string, password:string, confirmPassword:string, city:string, dateStart:string, dateEnd:string, appreciation: string, comment: string): Observable<FormExample> {
-      console.log("SERVUCE SAVE");
-      const form: FormExample = {user : {email, password, confirmPassword}, review: {city, dateStart, dateEnd, appreciation, comment}};
+    saveFormExample(formExample: FormExample): Observable<FormExample> {
       const obs = new Observable<FormExample>(observer => {
-        observer.next(form);
+        observer.next(formExample);
         observer.complete();
       });
 

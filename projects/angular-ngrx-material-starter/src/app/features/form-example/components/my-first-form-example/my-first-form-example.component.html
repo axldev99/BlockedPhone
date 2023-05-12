@@ -76,6 +76,7 @@
   <div >
     <h2>Appreciation survey</h2>
 
+    <!--
     <mat-form-field class="example-full-width" appearance="fill">
       <mat-label>City</mat-label>
       <input type="text" matInput formControlName="city" [matAutocomplete]="auto">
@@ -88,6 +89,19 @@
         City is <strong>needed!</strong>
       </mat-error>
     </mat-form-field>
+  -->
+
+
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Countries</mat-label>
+      <input type="text" matInput formControlName="countries" [matAutocomplete]="auto">
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+        <mat-option *ngFor="let country of filteredCountries$ | async" [value]="country.name">
+          {{country.name}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
 
     <!-- Très nice le date picker, meme pas besoin de gérer la first et last date -->
     <mat-form-field class="example-full-width" appearance="fill">

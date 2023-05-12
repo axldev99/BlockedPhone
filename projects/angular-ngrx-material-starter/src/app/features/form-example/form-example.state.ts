@@ -11,9 +11,9 @@ export const selectFormExample = createFeatureSelector<
 >(FORM_EXAMPLE_FEATURE_NAME);
 
 export interface FormExampleState {
-    formExample: FormExample;
+    user: User;
+    review: Review;
     page: number;
-    isAuthenticated: boolean;
 }
 
 export interface State extends AppState {
