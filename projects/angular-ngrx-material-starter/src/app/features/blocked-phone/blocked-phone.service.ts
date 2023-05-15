@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import { BlockedPhone } from "./blocked-phone.model";
+import { HttpClient } from "@angular/common/http";
 
 
 
@@ -8,16 +9,11 @@ import { BlockedPhone } from "./blocked-phone.model";
 @Injectable()
 export class BlockedPhoneService {
 
-    constructor() {
-    }
+  private apiUrl = './assets/data.json'; // Remplacez par l'URL de votre fichier JSON
 
-    saveFormExample(blockedPhone: BlockedPhone): Observable<BlockedPhone> {
-      const obs = new Observable<BlockedPhone>(observer => {
-        observer.next(blockedPhone);
-        observer.complete();
-      });
+  constructor(private http: HttpClient) { }
 
-      return obs;
-    }
-
+  retrieveBlockedPhone(): Observable<BlockedPhone[]> {
+    return this.http.get<BlockedPhone[]>(this.apiUrl);
+  }
 }

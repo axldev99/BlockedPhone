@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Delete Phone Number</h1>
+<div mat-dialog-content>
+  Are you sure you want to delete {{blockedPhoneNumber}} ?
+</div>
+<div mat-dialog-actions>
+  <button (click)="onNoClick()" mat-button mat-dialog-close>No</button>
+  <button (click)="onYesClick()" mat-button mat-dialog-close cdkFocusInitial>Ok</button>
+</div>

@@ -8,3 +8,5 @@ export interface BlockedPhone {
     blockedPhoneCallCount : number; //Nombre d'appels depuis le blocage
     blockedPhoneActive : boolean; //Le blocage est-il actif
 }
+
+

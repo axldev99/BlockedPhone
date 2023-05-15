@@ -5,13 +5,23 @@ import { BlockedPhone } from './blocked-phone.model';
 
 export const FORM_EXAMPLE_FEATURE_NAME = 'blockedPhone';
 
-export const selectFormExample = createFeatureSelector<
+export const selectBlockedPhone = createFeatureSelector<
     AppState,
     BlockedPhoneState
 >(FORM_EXAMPLE_FEATURE_NAME);
 
 export interface BlockedPhoneState {
-    blockedPhone : BlockedPhone;
+    blockedPhone: BlockedPhone[];
+    /*
+    blockedPhoneNumber: string,
+    blockedPhoneForWho: string,
+    blockedPhoneByWho: string,
+    blockedPhoneDate: string,
+    blockedPhoneDateLastModification: string,
+    blockedPhoneLastCalled: string,
+    blockedPhoneCallCount: number,
+    blockedPhoneActive: boolean,
+    */
 }
 
 export interface State extends AppState {

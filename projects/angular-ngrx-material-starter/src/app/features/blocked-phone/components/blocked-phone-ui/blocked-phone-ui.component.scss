@@ -1,0 +1,41 @@
+.main-component{
+  margin-left:auto;
+  margin-right:auto;
+  width: 80%;
+  border:1px solid gray;
+  border-radius: 5px;
+}
+
+.padding-bottom{
+  padding-bottom:10px;
+}
+
+.border-bottom{
+  border-bottom:1px solid gray;
+}
+
+.base-button{
+  background-color:transparent;
+  border:none;
+}
+
+.add-button{
+  color:green;
+}
+
+.delete-button{
+  color:red;
+}
+
+.left{
+  float:left;
+}
+
+.right{
+  float:right;
+}
+
+.text-center{
+  text-align: center;
+}
+

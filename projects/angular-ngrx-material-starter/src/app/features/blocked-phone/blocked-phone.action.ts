@@ -1,35 +1,63 @@
 import { createAction, props } from '@ngrx/store';
 import { BlockedPhone } from './blocked-phone.model';
 
+  /*RETRIEVE*/
+  export const blockedPhoneRetrieveRequested = createAction(
+    '[Blocked Phone] Retrieve Requested',
+    props<{ blockedPhone: BlockedPhone[] }>()
+  );
+  
+  export const blockedPhoneRetrieveSuccess = createAction(
+    '[Blocked Phone] Retrieve Success',
+    props<{ blockedPhone: BlockedPhone[] }>()
+  );
+  
+  export const blockedPhoneRetrieveError = createAction(
+    '[Blocked Phone] Retrieve Error'
+  );
+
+  /*DELETE*/
+  export const blockedPhoneDeleteRequested = createAction(
+    '[Blocked Phone] Delete Requested',
+    props<{ blockedPhone: BlockedPhone }>()
+  );
+
+  export const blockedPhoneDeleteSuccess = createAction(
+    '[Blocked Phone] Delete Success',
+    props<{ blockedPhone: BlockedPhone }>()
+  );
+
+  export const blockedPhoneDeleteError = createAction(
+    '[Blocked Phone] Delete Error'
+  );
 
 
-/*
-export const saveFormExampleRequested = createAction(
-    "[FormExample] Save Form Requested",
-    props<{formExample: FormExample, page: number}>()
-);
+  /*
 
-export const saveFormExampleSuccess = createAction(
-    "[FormExample] Save Form Succcess",
-    props<{formExample: FormExample, page: number}>()
-);
+  export const blockedPhoneAddRequested = createAction(
+    '[Blocked Phone] Add Requested',
+    props<{ blockedPhone: BlockedPhone }>()
+  );
 
-export const saveFormExampleFail = createAction(
-    "[FormExample] Save Form Fail",
-);
+  export const blockedPhoneAddSuccess = createAction(
+    '[Blocked Phone] Add Success',
+  );
 
+  export const blockedPhoneAddError = createAction(
+    '[Blocked Phone] Add Error'
+  );
 
-export const reset = createAction(
-    "[FormExample] Reset"
-);
+  export const blockedPhoneUpdateRequested = createAction(
+    '[Blocked Phone] Update Requested',
+    props<{ blockedPhone: BlockedPhone }>()
+  );
 
-export const goNext = createAction(
-    "[FormExample] Go Next",
-    props<{page: number}>()
-);
+  export const blockedPhoneUpdateSuccess = createAction(
+    '[Blocked Phone] Update Success',
+  );
 
-export const goBack = createAction(
-    "[FormExample] Go Back",
-    props<{page: number}>()
-);
+  export const blockedPhoneUpdateError = createAction(
+    '[Blocked Phone] Update Error'
+  );
+
 */

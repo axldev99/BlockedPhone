@@ -1,1 +1,34 @@
-<p>blocked-phone-ui works!</p>
+<div class="main-component">
+    <h1 class="text-center">
+        Blocked Phone Numbers
+        <button mat-raised-button (click)="openAddDialog()" class="base-button add-button right">
+            <mat-icon aria-hidden="false" aria-label="Add_box icon">add_circle</mat-icon>
+        </button>
+    </h1>
+    <mat-grid-list cols="9" rowHeight="35px" class="border-bottom">
+        <mat-grid-tile>Blocked Phone</mat-grid-tile>
+        <mat-grid-tile>Blocked For</mat-grid-tile>
+        <mat-grid-tile>Blocked By</mat-grid-tile>
+        <mat-grid-tile>Date Blocked</mat-grid-tile>
+        <mat-grid-tile>Last Mod. Date</mat-grid-tile>
+        <mat-grid-tile>Last Call Blocked</mat-grid-tile>
+        <mat-grid-tile>Times Blocked</mat-grid-tile>
+        <mat-grid-tile>Active</mat-grid-tile>
+        <mat-grid-tile>Delete</mat-grid-tile>
+    </mat-grid-list>
+    <mat-grid-list cols="9" rowHeight="35px" *ngFor="let blockedPhone of (blockedPhones$ | async)">
+        <mat-grid-tile>{{blockedPhone.blockedPhoneNumber}}</mat-grid-tile>
+        <mat-grid-tile>{{blockedPhone.blockedPhoneForWho}}</mat-grid-tile>
+        <mat-grid-tile>{{blockedPhone.blockedPhoneByWho}}</mat-grid-tile>
+        <mat-grid-tile>{{blockedPhone.blockedPhoneDate}}</mat-grid-tile>
+        <mat-grid-tile>{{blockedPhone.blockedPhoneDateLastModification}}</mat-grid-tile>
+        <mat-grid-tile>{{blockedPhone.blockedPhoneLastCalled}}</mat-grid-tile>
+        <mat-grid-tile>{{blockedPhone.blockedPhoneCallCount}}</mat-grid-tile>
+        <mat-grid-tile><mat-slide-toggle [checked]="blockedPhone.blockedPhoneActive"></mat-slide-toggle></mat-grid-tile>
+        <mat-grid-tile>
+            <button mat-raised-button (click)="openDeleteDialog(blockedPhone.blockedPhoneNumber)" class="base-button delete-button">
+                <mat-icon aria-hidden="false" aria-label="Delete_Forever icon">delete_forever</mat-icon>
+            </button>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>

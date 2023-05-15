@@ -1,0 +1,72 @@
+[
+    {
+      "blockedPhoneNumber": "+1234567890",
+      "blockedPhoneForWho": "Utilisateur A",
+      "blockedPhoneByWho": "Utilisateur B",
+      "blockedPhoneDate": "2023-05-01",
+      "blockedPhoneDateLastModification": "2023-05-10",
+      "blockedPhoneLastCalled": "2023-05-14",
+      "blockedPhoneCallCount": 5,
+      "blockedPhoneActive": true
+    },
+    {
+      "blockedPhoneNumber": "+9876543210",
+      "blockedPhoneForWho": "Utilisateur C",
+      "blockedPhoneByWho": "Utilisateur D",
+      "blockedPhoneDate": "2023-04-20",
+      "blockedPhoneDateLastModification": "2023-05-05",
+      "blockedPhoneLastCalled": "2023-05-12",
+      "blockedPhoneCallCount": 10,
+      "blockedPhoneActive": true
+    },
+    {
+      "blockedPhoneNumber": "+5555555555",
+      "blockedPhoneForWho": "Utilisateur E",
+      "blockedPhoneByWho": "Utilisateur F",
+      "blockedPhoneDate": "2023-03-15",
+      "blockedPhoneDateLastModification": "2023-04-01",
+      "blockedPhoneLastCalled": "2023-05-10",
+      "blockedPhoneCallCount": 2,
+      "blockedPhoneActive": false
+    },
+    {
+      "blockedPhoneNumber": "+1111111111",
+      "blockedPhoneForWho": "Utilisateur G",
+      "blockedPhoneByWho": "Utilisateur H",
+      "blockedPhoneDate": "2023-02-10",
+      "blockedPhoneDateLastModification": "2023-03-01",
+      "blockedPhoneLastCalled": "2023-05-08",
+      "blockedPhoneCallCount": 8,
+      "blockedPhoneActive": true
+    },
+    {
+      "blockedPhoneNumber": "+9999999999",
+      "blockedPhoneForWho": "Utilisateur I",
+      "blockedPhoneByWho": "Utilisateur J",
+      "blockedPhoneDate": "2023-01-05",
+      "blockedPhoneDateLastModification": "2023-02-15",
+      "blockedPhoneLastCalled": "2023-05-11",
+      "blockedPhoneCallCount": 3,
+      "blockedPhoneActive": false
+    },
+    {
+      "blockedPhoneNumber": "+7777777777",
+      "blockedPhoneForWho": "Utilisateur K",
+      "blockedPhoneByWho": "Utilisateur L",
+      "blockedPhoneDate": "2022-12-01",
+      "blockedPhoneDateLastModification": "2023-01-15",
+      "blockedPhoneLastCalled": "2023-05-10",
+      "blockedPhoneCallCount": 12,
+      "blockedPhoneActive": true
+    },
+    {
+      "blockedPhoneNumber": "+2222222222",
+      "blockedPhoneForWho": "Utilisateur M",
+      "blockedPhoneByWho": "Utilisateur N",
+      "blockedPhoneDate": "2022-11-10",
+      "blockedPhoneDateLastModification": "2022-12-01",
+      "blockedPhoneLastCalled": "2023-05-13",
+      "blockedPhoneCallCount": 6,
+      "blockedPhoneActive": true
+    }
+]
