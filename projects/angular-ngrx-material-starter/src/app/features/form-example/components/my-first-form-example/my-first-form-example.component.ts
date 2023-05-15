@@ -22,10 +22,6 @@ import { selectFormExamplePage } from '../../form-example.selector';
 export class MyFirstFormExampleComponent implements OnInit, OnDestroy {
   unsubscribe: Subject<void> = new Subject<void>(); //Fais pour désouscrire les souscriptions qu'on va faire
 
-  /*Daniel*/
-  countries$: Observable<Countries[]>;
-  filteredCountries$: Observable<Countries[]>;
-
   /*Conditions*/
   containAtLeastEightChars = false;
   containAtLeastOneLowerCaseLetter = false;
@@ -64,23 +60,12 @@ export class MyFirstFormExampleComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder, private store: Store<AppState>, private formExampleService: FormExampleService) { }
   
   ngOnInit() {
-/*Daniel*/
-
-    this.countries$ = of([
-      { name: 'Afgan', code: 'AA' },
-      { name: 'Albania', code: 'AB' },
-      { name: 'Algeria', code: 'AC' },
-      { name: 'American Samoa', code: 'AD' },
-      { name: 'Andorra', code: 'AE' },
-      { name: 'Angola', code: 'AF' },
-      { name: 'Anguilla', code: 'AG' },
-    ]);
-
     //Initialiser LES CHAMPS FAUDRA TOUTE INITIALISER LES DATA
 
     const formExample = JSON.parse(localStorage.getItem("formExample")) ? localStorage.getItem("formExample") : null;
     this.page$ = this.store.pipe(select(selectFormExamplePage));
     this.formExample$ = this.store.pipe(select(selectFormExample));
+
     this.formExample$.pipe(takeUntil(this.unsubscribe)).subscribe(formExample => {
       this.formExample = formExample
     });//Chaque fois que le store change, met à jour la variable
@@ -101,7 +86,6 @@ export class MyFirstFormExampleComponent implements OnInit, OnDestroy {
       );
 
       if(parseInt(JSON.parse(formExample).review.appreciation) != 0){
-      console.log("setted");
         this.appreciationValue = parseInt(JSON.parse(formExample).review.appreciation);
       }
     }
@@ -119,7 +103,7 @@ export class MyFirstFormExampleComponent implements OnInit, OnDestroy {
           createPasswordStrenghtValidator(),
           createPasswordConfirmValidator('confirmPassword', true)
         ]}],
-      confirmPassword: [formExample ? JSON.parse(formExample).user.password : '', {validators: 
+      confirmPassword: [formExample ? JSON.parse(formExample).user.confirmPassword : '', {validators: 
         [
           Validators.required, 
           createPasswordConfirmValidator('password')
@@ -127,11 +111,10 @@ export class MyFirstFormExampleComponent implements OnInit, OnDestroy {
     }); 
 
     this.form2 = this.fb.group({
-      /*city: [formExample ? JSON.parse(formExample).review.city : '', {validators: 
+      city: [formExample ? JSON.parse(formExample).review.city : '', {validators: 
         [
           Validators.required
-        ]}],*/
-      countries: '',
+        ]}],
       dateStart: [formExample ? JSON.parse(formExample).review.dateStart : '', {validators: 
         [
           Validators.required
@@ -163,30 +146,12 @@ export class MyFirstFormExampleComponent implements OnInit, OnDestroy {
       tap(conditions => this.calcStrenghtAndColor(conditions.filter(condition => condition.class == 'valid').length * (100/conditions.length))),
     );
     this.conditionClass();
-/*
+
     this.filteredOptions = this.form2.get('city').valueChanges.pipe(
       startWith(''),
       debounceTime(300),
       map(option => this._filter(option))
     );
-*/
-    /*Daniel*/
-
-    const searchCountries = this.form2.get('countries').valueChanges.pipe(
-      startWith(''),
-      debounceTime(300),
-      switchMap(option => this._filterCountries(option)),
-    );
-    
-    this.filteredCountries$ = concat(searchCountries, this.countries$);
-
-  }
-  private _filterCountries(searchTerm: string): Observable<Countries[]> {
-    const filteredCountries = this.countries$.pipe(
-      map(countries => countries.filter(country => country.name.toLowerCase().includes(searchTerm.toLowerCase()))),
-    );
-
-    return filteredCountries;
   }
 
   //Filtre les options de la ville

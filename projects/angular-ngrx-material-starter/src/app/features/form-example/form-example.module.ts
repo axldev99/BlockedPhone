@@ -46,7 +46,7 @@ import { OnlyOneErrorPipe } from './form-example-pipe';
     MatAutocompleteModule,
     MatDatepickerModule,
     MatSliderModule,
-    StoreModule.forFeature('auth', formExampleReducer),
+    StoreModule.forFeature('formExample', formExampleReducer),
     EffectsModule.forFeature([FormExampleEffect]),
   ],
   providers: [
@@ -54,9 +54,9 @@ import { OnlyOneErrorPipe } from './form-example-pipe';
   ]
 })
 export class FormExampleModule { 
-  static forRoot(): ModuleWithProviders<FormExampleModule> {
-    return {
-        ngModule: FormExampleModule
-    }
-}
+    static forRoot(): ModuleWithProviders<FormExampleModule> {
+      return {
+          ngModule: FormExampleModule
+      }
+  }
 }

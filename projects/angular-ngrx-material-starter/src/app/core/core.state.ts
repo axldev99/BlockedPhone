@@ -16,12 +16,16 @@ import { settingsReducer } from './settings/settings.reducer';
 import { SettingsState } from './settings/settings.model';
 import { FormExampleState } from '../features/form-example/form-example.state';
 import { formExampleBaseReducer } from '../features/form-example/form-example.reducer';
+import { BlockedPhone } from '../features/blocked-phone/blocked-phone.model';
+import { blockedPhoneBaseReducer } from '../features/blocked-phone/blocked-phone.reducer';
+import { BlockedPhoneState } from '../features/blocked-phone/blocked-phone.state';
 
 export const reducers: ActionReducerMap<AppState> = {
   auth: authReducer,
   settings: settingsReducer,
   router: routerReducer,
-  formExample: formExampleBaseReducer
+  formExample: formExampleBaseReducer,
+  blockedPhone: blockedPhoneBaseReducer
 };
 
 export const metaReducers: MetaReducer<AppState>[] = [
@@ -53,4 +57,5 @@ export interface AppState {
   settings: SettingsState;
   router: RouterReducerState<RouterStateUrl>;
   formExample: FormExampleState;
+  blockedPhone: BlockedPhoneState;
 }

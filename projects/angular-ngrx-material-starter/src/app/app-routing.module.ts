@@ -41,6 +41,13 @@ const routes: Routes = [
       )
   },
   {
+    path: 'blocked-phone',
+    loadChildren: () =>
+      import('./features/blocked-phone/blocked-phone.module').then(
+        (m) => m.BlockedPhoneModule
+      )
+  },
+  {
     path: '**',
     redirectTo: 'about'
   }

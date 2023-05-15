@@ -19,10 +19,7 @@ export const formExampleReducer = createReducer(
         page: page
     })),
 
-    on(FormExampleAction.reset, (state, action) => ({
-        ...state, 
-        initialState
-    })),
+    on(FormExampleAction.reset, () => initialState),
 
     on(FormExampleAction.goNext, (state, action) => ({
         ...state,
