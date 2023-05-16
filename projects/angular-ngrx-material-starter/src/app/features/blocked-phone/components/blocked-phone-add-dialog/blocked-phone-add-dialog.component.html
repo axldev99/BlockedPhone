@@ -1,1 +1,55 @@
-<p>blocked-phone-add-dialog works!</p>
+<mat-dialog-content>
+	<p>
+		You are about to block a phone number ?
+	</p>
+    <form class="example-form" [formGroup]="AddBlockedPhoneForm">
+  
+        <div>
+          <h2>Block a phone number</h2>
+      
+      
+          <mat-form-field class="example-full-width">
+            <mat-label>Phone number to block</mat-label>
+            <input type="phone" matInput formControlName="blockedPhoneNumber"
+                   placeholder="Ex. 18889094645" name="blockedPhoneNumber">
+            <mat-error *ngIf="AddBlockedPhoneForm.controls['blockedPhoneNumber'].hasError('required')">
+              Phone number is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="AddBlockedPhoneForm.controls['blockedPhoneNumber'].hasError('pattern')">
+              Please enter a valid phone number
+            </mat-error>
+          </mat-form-field>
+
+          <section class="example-section">
+            <mat-checkbox formControlName="blockedPhoneForAll" class="example-margin">Block For All </mat-checkbox>
+          </section>
+
+          <mat-form-field class="example-full-width" appearance="fill" *ngIf="!AddBlockedPhoneForm.get('blockedPhoneForAll').value">
+            <mat-label>Block Phone Number for </mat-label>
+            <input type="text" matInput formControlName="blockedPhoneNumberForWho" [matAutocomplete]="auto">
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+              <mat-option *ngFor="let user of filteredUsers$ | async" [value]="user.phoneNumber">
+                {{user.phoneNumber}} - {{user.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="AddBlockedPhoneForm.controls['blockedPhoneNumberForWho'].hasError('required')">
+              Phone number is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="AddBlockedPhoneForm.controls['blockedPhoneNumberForWho'].hasError('pattern')">
+                Please enter a valid phone number
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </form>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+    <div class="example-button-row">
+        <button tabindex="1" class="btnLeft base-button confirm-button" [disabled]="!AddBlockedPhoneForm.valid" mat-raised-button (click)="submit()">
+            Submit
+        </button>
+
+        <button tabindex="-1" class="btnRight base-button cancel-button" mat-raised-button (click)="cancel()">
+          Cancel
+      </button>
+      </div>
+</mat-dialog-actions>

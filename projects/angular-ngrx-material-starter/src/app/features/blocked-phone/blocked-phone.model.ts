@@ -9,4 +9,8 @@ export interface BlockedPhone {
     blockedPhoneActive : boolean; //Le blocage est-il actif
 }
 
+export interface User {
+    name: string;
+    phoneNumber: string;
+}
 

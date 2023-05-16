@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { blockedPhoneDeleteRequested, blockedPhoneDeleteSuccess, blockedPhoneRetrieveRequested, blockedPhoneRetrieveSuccess } from "./blocked-phone.action";
+import * as BlockedPhoneAction  from "./blocked-phone.action";
 import { catchError, exhaustMap, map } from "rxjs/operators";
 import { BlockedPhoneService } from "./blocked-phone.service";
 import { of } from "rxjs";
@@ -10,11 +10,11 @@ export class BlockedPhoneEffect {
 
   retrieveBlockedPhone$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(blockedPhoneRetrieveRequested),
+      ofType(BlockedPhoneAction.blockedPhoneRetrieveRequested),
       exhaustMap(action =>
         this.service.retrieveBlockedPhone().pipe(
           //Ajouter au localStorage ?
-          map(blockedPhone => blockedPhoneRetrieveSuccess({ blockedPhone })),
+          map(blockedPhone => BlockedPhoneAction.blockedPhoneRetrieveSuccess({ blockedPhone })),
           //catchError(error => of(blockedPhoneRetrieveFailure({ error })))
         )
       )
@@ -23,8 +23,15 @@ export class BlockedPhoneEffect {
 
   deleteBlockedPhone$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(blockedPhoneDeleteRequested),
-        map(action => blockedPhoneDeleteSuccess({ blockedPhone: action.blockedPhone }))
+      ofType(BlockedPhoneAction.blockedPhoneDeleteRequested),
+        map(action => BlockedPhoneAction.blockedPhoneDeleteSuccess({ blockedPhone: action.blockedPhone }))
+    )
+  );
+
+  addBlockedPhone$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(BlockedPhoneAction.blockedPhoneAddRequested),
+        map(action => BlockedPhoneAction.blockedPhoneAddSuccess({ blockedPhone: action.blockedPhone }))
     )
   );
    

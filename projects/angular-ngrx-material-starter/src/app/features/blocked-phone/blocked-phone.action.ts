@@ -31,9 +31,6 @@ import { BlockedPhone } from './blocked-phone.model';
     '[Blocked Phone] Delete Error'
   );
 
-
-  /*
-
   export const blockedPhoneAddRequested = createAction(
     '[Blocked Phone] Add Requested',
     props<{ blockedPhone: BlockedPhone }>()
@@ -41,12 +38,14 @@ import { BlockedPhone } from './blocked-phone.model';
 
   export const blockedPhoneAddSuccess = createAction(
     '[Blocked Phone] Add Success',
+    props<{ blockedPhone: BlockedPhone }>()
   );
 
   export const blockedPhoneAddError = createAction(
     '[Blocked Phone] Add Error'
   );
 
+  /*
   export const blockedPhoneUpdateRequested = createAction(
     '[Blocked Phone] Update Requested',
     props<{ blockedPhone: BlockedPhone }>()

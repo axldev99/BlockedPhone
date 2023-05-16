@@ -3,13 +3,14 @@ import { Store, select } from '@ngrx/store';
 import { Subject, Observable } from 'rxjs';
 import { takeUntil, map, tap } from 'rxjs/operators';
 import { AppState } from '../../../../core/core.state';
-import { blockedPhoneDeleteRequested, blockedPhoneRetrieveRequested } from '../../blocked-phone.action';
+import { blockedPhoneAddRequested, blockedPhoneDeleteRequested, blockedPhoneRetrieveRequested } from '../../blocked-phone.action';
 import { BlockedPhone } from '../../blocked-phone.model';
 import { selectAllBlockedPhone } from '../../blocked-phone.selector';
 import { BlockedPhoneService } from '../../blocked-phone.service';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { BlockedPhoneDeleteDialogComponent } from '../blocked-phone-delete-dialog/blocked-phone-delete-dialog.component';
 import { BlockedPhoneAddDialogComponent } from '../blocked-phone-add-dialog/blocked-phone-add-dialog.component';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'anms-blocked-phone-ui',
@@ -21,47 +22,53 @@ export class BlockedPhoneUiComponent implements OnInit, OnDestroy {
   unsubscribe: Subject<void> = new Subject<void>(); //Fais pour désouscrire les souscriptions qu'on va faire
   blockedPhones$: Observable<BlockedPhone[]>;
   blockedPhones: BlockedPhone[];
-  initialBlockedPhone$: Observable<BlockedPhone[]>;
   isDataLoaded: boolean = false;
+
 
   constructor(public dialog: MatDialog, public store: Store<AppState>, public blockedPhoneService: BlockedPhoneService) { }
 
   openDeleteDialog(blockedPhone: BlockedPhone): void {
-    const dialogRef = this.dialog.open(BlockedPhoneDeleteDialogComponent, {
-      data: blockedPhone
-    });
-
+    const dialogRef = this.dialog.open(BlockedPhoneDeleteDialogComponent, { data: blockedPhone });
     dialogRef.afterClosed().subscribe((result: boolean) => {
-      console.log('The dialog was closed');
-      if(result) {
-        this.deleteBlockedPhone(blockedPhone);
-        console.log('YES');
-      }
-      else {
-        console.log('NO');
-      }
-      //this.animal = result;
+      if(result) this.deleteBlockedPhone(blockedPhone);
     });
   }
 
   openAddDialog(): void {
-    const dialogRef = this.dialog.open(BlockedPhoneAddDialogComponent, {
-      width: '250px',
-    });
+    const dialogRef = this.dialog.open(BlockedPhoneAddDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log(result);
-      //this.animal = result;
+      if(result) {
+        const date = new Date().toLocaleDateString('en-CA').replace(/\//g, '-');
+        console.log(result);
+        this.addBlockedPhone({
+          blockedPhoneNumber: result.blockedPhoneNumber,
+          blockedPhoneForWho: result.blockedPhoneForAll? "all" : result.blockedPhoneNumberForWho,
+          blockedPhoneByWho: "Uncle Will",
+          blockedPhoneDate: date,
+          blockedPhoneDateLastModification: date,
+          blockedPhoneLastCalled: date,
+          blockedPhoneCallCount: 0,
+          blockedPhoneActive: true
+        })
+      }       
     });
   }
 
   ngOnInit(): void {
-    //this.initialBlockedPhone$ = BlockedPhoneService.retrieveBlockedPhone();
     this.retrieveBlockedPhone();
-    this.blockedPhones$ = this.store.pipe(takeUntil(this.unsubscribe)).pipe(select(selectAllBlockedPhone));
-
-    this.blockedPhones$.subscribe((data) => {console.log(data) });
+  
+    this.blockedPhones$ = this.store.pipe(
+      takeUntil(this.unsubscribe),
+      select(selectAllBlockedPhone)
+    );
+  
+    // Each time that blockedPhones$ changes, update the array blockedPhones
+    this.blockedPhones$.subscribe(
+      blockedPhone => {
+        this.blockedPhones = blockedPhone;
+      }
+    );
   }
 
   ngOnDestroy(): void {
@@ -70,7 +77,6 @@ export class BlockedPhoneUiComponent implements OnInit, OnDestroy {
   }
 
   retrieveBlockedPhone() {
-    
     this.blockedPhoneService.retrieveBlockedPhone()
     .pipe(
       takeUntil(this.unsubscribe),
@@ -82,18 +88,19 @@ export class BlockedPhoneUiComponent implements OnInit, OnDestroy {
       })
     )
     .subscribe();
-
-    this.blockedPhones$ = this.store.pipe(select(selectAllBlockedPhone)); //Actualise le tableau OBSERVABLE de blockedPhone
-
-    this.blockedPhones$.pipe(takeUntil(this.unsubscribe)).subscribe(
-      blockedPhone => {
-        this.blockedPhones = blockedPhone;
-      }); //Actualise le tableau de blockedPhone
   }
 
   deleteBlockedPhone(blockedPhone: BlockedPhone) {
     this.store.dispatch(blockedPhoneDeleteRequested({ blockedPhone }));
-    this.blockedPhones$ = this.store.pipe(select(selectAllBlockedPhone));
+    //this.blockedPhones$ = this.store.pipe(select(selectAllBlockedPhone));
   }
 
+  addBlockedPhone(blockedPhone: BlockedPhone) {
+    this.store.dispatch(blockedPhoneAddRequested({ blockedPhone }));
+    //this.blockedPhones$ = this.store.pipe(select(selectAllBlockedPhone));
+  }
+
+  updateBlockedPhoneActiveStatus(blockedPhone: BlockedPhone){
+
+  }
 }

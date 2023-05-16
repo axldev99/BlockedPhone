@@ -40,6 +40,11 @@ export const blockedPhoneReducer = createReducer(
         blockedPhone: state.blockedPhone.filter(bp => bp !== blockedPhone),
     })),
 
+    on(BlockedPhoneAction.blockedPhoneAddSuccess, (state, {blockedPhone}) => ({
+        ...state,
+        blockedPhone: [...state.blockedPhone, blockedPhone]
+    })),
+
     
 );
 
