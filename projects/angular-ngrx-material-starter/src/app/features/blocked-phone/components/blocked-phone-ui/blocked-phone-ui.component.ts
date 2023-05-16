@@ -3,7 +3,7 @@ import { Store, select } from '@ngrx/store';
 import { Subject, Observable } from 'rxjs';
 import { takeUntil, map, tap } from 'rxjs/operators';
 import { AppState } from '../../../../core/core.state';
-import { blockedPhoneAddRequested, blockedPhoneDeleteRequested, blockedPhoneRetrieveRequested } from '../../blocked-phone.action';
+import * as BlockedPhoneAction from '../../blocked-phone.action';
 import { BlockedPhone } from '../../blocked-phone.model';
 import { selectAllBlockedPhone } from '../../blocked-phone.selector';
 import { BlockedPhoneService } from '../../blocked-phone.service';
@@ -82,7 +82,7 @@ export class BlockedPhoneUiComponent implements OnInit, OnDestroy {
       takeUntil(this.unsubscribe),
       tap(blockedPhone => {
         if (!this.isDataLoaded) {
-          this.store.dispatch(blockedPhoneRetrieveRequested({ blockedPhone }));
+          this.store.dispatch(BlockedPhoneAction.blockedPhoneRetrieveRequested({ blockedPhone }));
           this.isDataLoaded = true;
         }
       })
@@ -91,13 +91,17 @@ export class BlockedPhoneUiComponent implements OnInit, OnDestroy {
   }
 
   deleteBlockedPhone(blockedPhone: BlockedPhone) {
-    this.store.dispatch(blockedPhoneDeleteRequested({ blockedPhone }));
+    this.store.dispatch(BlockedPhoneAction.blockedPhoneDeleteRequested({ blockedPhone }));
     //this.blockedPhones$ = this.store.pipe(select(selectAllBlockedPhone));
   }
 
   addBlockedPhone(blockedPhone: BlockedPhone) {
-    this.store.dispatch(blockedPhoneAddRequested({ blockedPhone }));
+    this.store.dispatch(BlockedPhoneAction.blockedPhoneAddRequested({ blockedPhone }));
     //this.blockedPhones$ = this.store.pipe(select(selectAllBlockedPhone));
+  }
+
+  onChangeBlockedPhoneActiveStatus(event, blockedPhone: BlockedPhone){
+    this.store.dispatch(BlockedPhoneAction.blockedPhoneUpdateActiveStatusRequested({status: event.checked, blockedPhone}));
   }
 
   updateBlockedPhoneActiveStatus(blockedPhone: BlockedPhone){

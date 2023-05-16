@@ -34,6 +34,13 @@ export class BlockedPhoneEffect {
         map(action => BlockedPhoneAction.blockedPhoneAddSuccess({ blockedPhone: action.blockedPhone }))
     )
   );
+
+  updateBlockedPhoneActiveStatus$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(BlockedPhoneAction.blockedPhoneUpdateActiveStatusRequested),
+        map(action => BlockedPhoneAction.blockedPhoneUpdateActiveStatusSuccess({ blockedPhone: action.blockedPhone, status: action.status }))
+    )
+  );
    
   constructor(
     private actions$: Actions,

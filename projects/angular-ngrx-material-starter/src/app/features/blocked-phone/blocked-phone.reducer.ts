@@ -45,6 +45,10 @@ export const blockedPhoneReducer = createReducer(
         blockedPhone: [...state.blockedPhone, blockedPhone]
     })),
 
+    on(BlockedPhoneAction.blockedPhoneUpdateActiveStatusSuccess, (state, {blockedPhone, status}) => ({
+        ...state,
+        blockedPhone: state.blockedPhone.map(bp => bp.blockedPhoneNumber === blockedPhone.blockedPhoneNumber ? {...bp, blockedPhoneActive: status} : bp)
+    })),
     
 );
 

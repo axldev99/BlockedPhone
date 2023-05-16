@@ -24,7 +24,7 @@
         <mat-grid-tile>{{blockedPhone.blockedPhoneDateLastModification}}</mat-grid-tile>
         <mat-grid-tile>{{blockedPhone.blockedPhoneLastCalled}}</mat-grid-tile>
         <mat-grid-tile>{{blockedPhone.blockedPhoneCallCount}}</mat-grid-tile>
-        <mat-grid-tile><mat-slide-toggle [checked]="blockedPhone.blockedPhoneActive"></mat-slide-toggle></mat-grid-tile>
+        <mat-grid-tile><mat-slide-toggle (change)="onChangeBlockedPhoneActiveStatus($event, blockedPhone)" [checked]="blockedPhone.blockedPhoneActive"></mat-slide-toggle></mat-grid-tile>
         <mat-grid-tile>
             <button (click)="openDeleteDialog(blockedPhone)" class="base-button delete-button">
                 <mat-icon aria-hidden="false" aria-label="Delete_Forever icon">delete_forever</mat-icon>

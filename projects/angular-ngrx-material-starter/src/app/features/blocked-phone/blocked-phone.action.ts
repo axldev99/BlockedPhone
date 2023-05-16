@@ -45,18 +45,16 @@ import { BlockedPhone } from './blocked-phone.model';
     '[Blocked Phone] Add Error'
   );
 
-  /*
-  export const blockedPhoneUpdateRequested = createAction(
+  export const blockedPhoneUpdateActiveStatusRequested = createAction(
     '[Blocked Phone] Update Requested',
-    props<{ blockedPhone: BlockedPhone }>()
+    props<{ status: boolean, blockedPhone: BlockedPhone }>()
   );
 
-  export const blockedPhoneUpdateSuccess = createAction(
+  export const blockedPhoneUpdateActiveStatusSuccess = createAction(
     '[Blocked Phone] Update Success',
+    props<{ status: boolean, blockedPhone: BlockedPhone }>()
   );
 
-  export const blockedPhoneUpdateError = createAction(
+  export const blockedPhoneUpdateActiveStatusError = createAction(
     '[Blocked Phone] Update Error'
   );
-
-*/
